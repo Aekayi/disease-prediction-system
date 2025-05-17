@@ -4,7 +4,7 @@ import localIcon from "../assets/index.js";
 export default function Home() {
   return (
     <>
-      <div className="relative">
+      <div className="relative w-full h-[500px]">
         <img src={localIcon.bg} alt="" className="w-full h-[500px] z-10" />
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
           <h1 className="text-4xl font-bold">Disease Prediction System</h1>
@@ -45,7 +45,7 @@ export default function Home() {
           </div>
         </div>
         <div className="space-y-2">
-          <img class="aspect-square" src={localIcon.banner2} />
+          <img className="aspect-square" src={localIcon.banner2} />
           <h3 className="text-xl text-center font-semibold m-4 text-gray-600">
             Disease Dataset System
           </h3>

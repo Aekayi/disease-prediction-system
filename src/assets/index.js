@@ -12,6 +12,8 @@ import banner1 from "./images/banner1.png";
 import banner2 from "./images/banner2.jpg";
 import banner3 from "./images/banner3.jpg";
 
+import close from "./icons/close.svg";
+
 export default {
   logo,
   facebook,
@@ -23,4 +25,5 @@ export default {
   banner1,
   banner2,
   banner3,
+  close,
 };

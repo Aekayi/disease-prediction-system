@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://mrbookingv2.innovixdigital.com",
+    baseUrl: "http://127.0.0.1:8000",
     prepareHeaders: (headers, { getState }) => {
       const token = getState().auth.token;
       if (token) {
@@ -22,11 +22,11 @@ export const apiSlice = createApi({
     },
   }),
   refetchOnFocus: true,
-  tagTypes: ["Booking"],
+  tagTypes: ["Disease"],
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
-        url: "/api/login",
+        url: "/api/v1/login",
         method: "POST",
         body: credentials,
         headers: {
@@ -48,131 +48,27 @@ export const apiSlice = createApi({
         return response || { message: "Password changed successfully!" };
       },
     }),
-
-    users: builder.query({
-      query: () => `/api/users`,
-    }),
-    participants: builder.query({
-      query: () => `/api/participants`,
-    }),
-
-    facilities: builder.query({
-      query: () => `/api/categories`,
-    }),
-    facilityid: builder.query({
-      query: (facilityByRoomId) => {
-        return `/api/facilities/${facilityByRoomId}`;
-      },
-    }),
-    facilitynames: builder.query({
-      query: (facilityName) => `/api/facilityByCat/${facilityName}`,
-      invalidatesTags: ["Booking"],
-    }),
-
-    getBookedSlots: builder.query({
-      query: ({ id }) => `/api/bookingListByFacility/${id}`,
-      invalidatesTags: ["Booking"],
-    }),
-    createBooking: builder.mutation({
-      query: (bookingDetails) => ({
-        url: `/api/bookRequest`,
-        method: "POST",
-        body: bookingDetails,
+    getSymptoms: builder.query({
+      query: () => ({
+        url: "/api/v1/symptoms",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       }),
-      invalidatesTags: ["Booking"],
     }),
-    getHolidays: builder.query({
-      query: () => `/api/holidays`,
-    }),
-    bookedListByDate: builder.query({
-      query: ({ facilityByRoomId, bookedListByDate }) => {
-        return `/api/bookingList/${facilityByRoomId}/${bookedListByDate}`;
-      },
-      providesTags: ["Booking"],
-    }),
-    fleetBookedListByDate: builder.query({
-      query: ({ date }) => {
-        return `api/fleetbookingListByDate/${date}`;
-      },
-      providesTags: ["Booking"],
-    }),
-    bookedListByUser: builder.query({
-      query: ({ userId }) => {
-        return `/api/bookingListByUser/${userId}`;
-      },
-      providesTags: ["Booking"],
-    }),
-    userbyId: builder.query({
-      query: (id) => {
-        return `/api/users/${id}`;
-      },
-    }),
-    deleteBooking: builder.mutation({
-      query: (bookingId) => ({
-        url: `/api/bookRequest/${bookingId}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: ["Booking"],
-    }),
-    updateBooking: builder.mutation({
-      query: ({ bookingId, data }) => ({
-        url: `/api/bookRequest/${bookingId}`,
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: data,
-      }),
-      invalidatesTags: ["Booking"],
-    }),
-    approvedBooking: builder.mutation({
-      query: ({ bookingId, status }) => ({
-        url: `/api/bookingStatus/${bookingId}`,
+    predictDisease: builder.query({
+      query: ({ symptoms }) => ({
+        url: "/api/v1/predict",
         method: "POST",
-        params: { status },
+        body: { symptoms },
       }),
-      invalidatesTags: ["Booking"],
-    }),
-    bookingDetails: builder.query({
-      query: (bookingId) => {
-        return `/api/bookRequest/${bookingId}`;
-      },
-      invalidatesTags: ["Booking"],
-    }),
-    locations: builder.query({
-      query: () => `/api/locations`,
-      invalidatesTags: ["Booking"],
-    }),
-    MapLocations: builder.query({
-      query: ({ date }) => {
-        return `api/getMapViewBookingListByDate/${date}`;
-      },
-      providesTags: ["Booking"],
     }),
   }),
 });
 export const {
   useLoginMutation,
-  useUsersQuery,
-  useParticipantsQuery,
-  useUserbyIdQuery,
-  useFacilitiesQuery,
-  useFacilitynamesQuery,
-  useFacilityidQuery,
   useChangePasswordMutation,
-  useGetBookedSlotsQuery,
-  useCreateBookingMutation,
-  useGetHolidaysQuery,
-  useBookedListByDateQuery,
-  useFleetBookedListByDateQuery,
-  useBookedListByUserQuery,
-  useDeleteBookingMutation,
-  useUpdateBookingMutation,
-  useApprovedBookingMutation,
-  useBookingDetailsQuery,
-  useLocationsQuery,
-  useMapLocationsQuery,
+  useGetSymptomsQuery,
+  useLazyPredictDiseaseQuery,
 } = apiSlice;
